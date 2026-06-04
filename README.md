@@ -65,6 +65,7 @@ uv venv
 ### 2. Instalar dependencias
 
 ```bash
+uv init
 uv add -r requirements.txt
 ```
 Con pip estándar: `pip install -r requirements.txt`.
