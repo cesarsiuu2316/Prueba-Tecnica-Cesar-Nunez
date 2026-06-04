@@ -10,7 +10,6 @@ import os
 from dotenv import load_dotenv
 from embedding_docs import EmbeddingManager
 from vector_store import VectorStore
-from data_ingest import chunk_documents, clean_documents, load_documents
 
 load_dotenv()
 TOP_K = int(os.getenv("TOP_K", "4"))
@@ -114,19 +113,7 @@ class RAGRetriever:
 
 def main() -> None:
     """Quick check: a relevant question and an off-topic one."""
-    chunks = chunk_documents(clean_documents(load_documents()))
-
-    texts = []
-    for chunk in chunks:
-        texts.append(chunk.page_content)
-
-    embeddings_manager = EmbeddingManager()
-    embeddings = embeddings_manager.embed_documents(texts)
-
-    store = VectorStore()
-    store.add_documents(chunks, embeddings)
-
-    retriever = RAGRetriever(embedding_manager=EmbeddingManager(), vector_store=store)
+    retriever = RAGRetriever(embedding_manager=EmbeddingManager(), vector_store=VectorStore())
     questions = [
         "Contraseña y credenciales de login incorrectas?",
         "¿Cuál es la capital de Francia?",
