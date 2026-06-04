@@ -1,8 +1,8 @@
 # API (bundles uvicorn + CLI via the standard extra)
 fastapi[standard]
 
-# Typed config for config.py (pydantic itself ships with FastAPI)
-pydantic-settings
+# Config loaded from .env via python-dotenv + os (pydantic itself ships with FastAPI)
+python-dotenv
 
 # Ingestion — LangChain core Documents + splitters; pypdf for PDF
 langchain-core

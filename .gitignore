@@ -6,3 +6,6 @@ specs
 # Planning stages files
 plan.md
 CLAUDE.md
+
+# venv
+.venv/
