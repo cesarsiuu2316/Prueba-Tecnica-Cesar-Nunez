@@ -4,7 +4,7 @@ Runs the full pipeline once - load -> clean -> chunk -> embed -> store - so the
 retrieval API has a populated ChromaDB collection to search.
 
 Usage:
-    python app/ingest.py
+    python app/main.py
 """
 
 from data_ingest import chunk_documents, clean_documents, load_documents
