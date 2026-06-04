@@ -182,7 +182,7 @@ El nodo usa el `grounding_prompt` devuelto por la API como prompt de entrada.
 
 **Opción A — OpenAI (recomendada):**
 1. Crea una credencial *OpenAI* en n8n con tu API key (de `https://platform.openai.com`).
-2. Selecciona un modelo, p. ej. `gpt-4o-mini`.
+2. Selecciona un modelo, p. ej. `gpt-5.4-nano` (bajo consumo y buen rendimiento).
 
 **Opción B — Ollama (local, sin coste):**
 1. Instala Ollama y arráncalo:
@@ -190,19 +190,25 @@ El nodo usa el `grounding_prompt` devuelto por la API como prompt de entrada.
    ollama serve            # escucha en 127.0.0.1:11434
    ollama pull llama3.1    # o el modelo que prefieras
    ```
-2. En n8n configura la credencial/URL base de Ollama:
-
-   | n8n corre en… | URL base de Ollama |
-   |---------------|--------------------|
-   | Host | `http://localhost:11434` |
-   | Docker | `http://host.docker.internal:11434` |
-3. Selecciona el modelo descargado.
+2. En n8n crea una credencial de **Ollama** (URL base `http://localhost:11434`; en Docker
+   `http://host.docker.internal:11434`), selecciona el modelo y listo.
 
 #### 4.5 Probar
 
 Envía una pregunta al webhook del workflow (con curl o Postman):
 ```bash
-curl -X POST <URL-del-webhook-n8n> -H "Content-Type: application/json" \
+# Producción
+curl -X POST http://localhost:5678/webhook/ask -H "Content-Type: application/json" \
+  -d '{"question":"El sistema devuelve error de conexión, ¿qué significa?"}'
+
+curl -X POST http://localhost:5678/webhook/ask -H "Content-Type: application/json" \
+  -d '{"question":"¿Como puedo contactar el área de soporte?}'
+
+curl -X POST http://localhost:5678/webhook/ask -H "Content-Type: application/json" \
+  -d '{"question":"¿Ya existe material con este código}'
+
+# Pruebas (con el workflow abierto y "Listen for test event" activo)
+curl -X POST http://localhost:5678/webhook-test/ask -H "Content-Type: application/json" \
   -d '{"question":"El sistema devuelve error de conexión, ¿qué significa?"}'
 ```
 
