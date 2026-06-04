@@ -9,3 +9,9 @@ CLAUDE.md
 
 # venv
 .venv/
+
+# env files
+.env
+
+# pycache
+app/__pycache__/
