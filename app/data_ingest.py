@@ -12,11 +12,14 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 from langchain_core.documents import Document
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from pypdf import PdfReader
 
 load_dotenv()
 DOCS_DIR = Path(os.getenv("DOCS_DIR", "docs"))
 SUPPORTED = {".txt", ".md", ".json", ".pdf"}
+CHUNK_SIZE = int(os.getenv("CHUNK_SIZE", "800"))
+CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", "200"))
 
 
 def _read_file(path: Path) -> str:
@@ -52,20 +55,47 @@ def clean_documents(documents: list[Document]) -> list[Document]:
 
 def _clean_text(text: str) -> str:
     """Fix unicode artifacts (e.g. the 'ﬁ' ligature) and collapse stray whitespace."""
-    text = unicodedata.normalize("NFKC", text)
-    text = text.replace("\r\n", "\n").replace("\r", "\n")
+    text = unicodedata.normalize("NFKC", text) # 
+    text = text.replace("\r\n", "\n").replace("\r", "\n") # unify newlines
     text = re.sub(r"[ \t]+", " ", text)       # collapse spaces/tabs within a line
     text = re.sub(r" *\n", "\n", text)         # drop trailing spaces
     text = re.sub(r"\n{3,}", "\n\n", text)     # collapse blank-line runs
     return text.strip()
 
 
+def chunk_documents(documents: list[Document]) -> list[Document]:
+    """Split documents into overlapping, size-bounded chunks for embedding.
+
+    A recursive splitter breaks on natural boundaries first (paragraphs, then
+    lines, then sentences), keeping each chunk coherent. Existing metadata
+    (e.g. ``source``) is carried over to every chunk automatically.
+    """
+    splitter = RecursiveCharacterTextSplitter(
+        chunk_size=CHUNK_SIZE,
+        chunk_overlap=CHUNK_OVERLAP,
+        separators=["\n\n", "\n", ". ", " ", ""],
+    )
+    return splitter.split_documents(documents)
+
+
 def main() -> None:
-    """Load and clean the corpus, then print a short summary."""
+    """Load, clean, and chunk the corpus, then print a short summary."""
     documents = clean_documents(load_documents())
-    print(f"Loaded {len(documents)} documents from {DOCS_DIR}/")
-    for doc in documents:
-        print(f"  {doc.metadata['source']}: {len(doc.page_content)} chars")
+    chunks = chunk_documents(documents)
+
+    counts = {}
+
+    for chunk in chunks:
+        source = chunk.metadata["source"]
+        counts[source] = counts.get(source, 0) + 1
+
+    print("First 5 chunks:")
+    for i, chunk in enumerate(chunks[9:14]):
+        print(f"  {i+1}. {chunk.metadata['source']}: {len(chunk.page_content)} chars")
+
+    print(f"Loaded {len(documents)} documents, produced {len(chunks)} chunks:")
+    for source in sorted(counts):
+        print(f"  {source}: {counts[source]} chunks")
 
 
 if __name__ == "__main__":
