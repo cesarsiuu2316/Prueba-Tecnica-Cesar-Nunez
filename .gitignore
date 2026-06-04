@@ -15,3 +15,8 @@ CLAUDE.md
 
 # pycache
 app/__pycache__/
+
+# dependacies
+uv.lock
+pyproject.toml
+.python-version
