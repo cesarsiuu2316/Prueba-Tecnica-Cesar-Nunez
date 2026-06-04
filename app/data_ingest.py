@@ -1,4 +1,4 @@
-"""Ingestion for the MineCatalog corpus: load files and clean their text.
+"""Ingestion for corpus: load files and clean their text.
 
 Reads every supported file in a directory (.txt, .md, .json, .pdf) into
 langchain_core Documents and normalizes the text. Chunking and embedding are

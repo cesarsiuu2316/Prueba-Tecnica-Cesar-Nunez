@@ -1,4 +1,4 @@
-"""Retrieval for the MineCatalog RAG API.
+"""Retrieval for RAG API.
 
 Embeds a user question, runs cosine search over the ChromaDB collection, keeps
 only the chunks above a similarity threshold, and assembles a Spanish grounding

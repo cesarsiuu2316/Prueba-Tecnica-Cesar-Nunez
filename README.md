@@ -1,4 +1,4 @@
-# Prueba Técnica — Asistente de Soporte RAG (MineCatalog)
+# Prueba Técnica — Asistente de Soporte RAG (UniLink)
 
 Un asistente de soporte que responde preguntas  usando únicamente la
 documentación técnica brindada. Las respuestas están en el corpus: si la documentación no contiene la respuesta, el asistente lo indica
