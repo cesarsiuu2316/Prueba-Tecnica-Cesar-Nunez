@@ -83,10 +83,6 @@ cp .env.example .env
 copy .env.example .env
 ```
 
-Edita `.env` con tu editor (`nano .env`, `vim .env`, o el editor de Windows) si quieres cambiar
-rutas o parámetros — los valores por defecto funcionan tal cual. **No se necesita ninguna API key
-aquí:** la generación (y por tanto la key de OpenAI) se configura en n8n. Ver
-[Referencia de configuración](#referencia-de-configuración).
 
 > La primera ejecución descargará el modelo de embeddings `multilingual-e5-small` (una sola vez).
 
@@ -107,13 +103,13 @@ python app/main.py
 # Ingesting corpus...
 # Done. Vector store holds N chunks.
 ```
-Es **idempotente** (usa `upsert` con IDs por contenido), así que puedes re-ejecutarlo tras cambiar
+Es **idempotente**, así que puedes re-ejecutarlo tras cambiar
 el corpus sin duplicar. El índice se guarda en `docs/chroma-db/`.
 
 ### Paso 3 — Iniciar la API
 
 ```bash
-fastapi dev app/api.py        # servidor de desarrollo con recarga + Swagger en /docs
+fastapi dev app/api.py        
 # alternativa: python app/api.py   (uvicorn en 127.0.0.1:8000)
 ```
 
@@ -126,6 +122,10 @@ curl localhost:8000/health
 # Pregunta relevante -> sufficient_context: true + contexto
 curl -X POST localhost:8000/retrieve -H "Content-Type: application/json" \
   -d '{"question":"¿Cómo soluciono el error de conexión con la base de datos?"}'
+
+# Pregunta irrelevante -> sufficient_context: false
+curl -X POST localhost:8000/retrieve -H "Content-Type: application/json" \
+  -d '{"question":"¿Cuál es la capital de Francia?"}'
 
 # Pregunta vacía -> 422 (validación)
 curl -X POST localhost:8000/retrieve -H "Content-Type: application/json" \
@@ -161,7 +161,7 @@ docker run -it --rm -p 5678:5678 -v n8n_data:/home/node/.n8n docker.n8n.io/n8nio
 
 #### 4.2 Importar el workflow
 
-En n8n: **Workflows → Import from File →** selecciona `Prueba-Tecnica-n8n-Workflow.json`
+En n8n: **Workflows → New workflow → Import from File →** selecciona `Prueba-Tecnica-n8n-Workflow.json`
 (en la raíz del repo).
 
 #### 4.3 Conectar el nodo HTTP Request a la API
