@@ -97,6 +97,10 @@ Coloca tus archivos de documentación en `docs/` (la carpeta se ignora en git, a
 vacía). Formatos soportados: **`.txt`, `.md`, `.pdf`, `.json`**. Puedes usar el corpus de ejemplo
 descrito en `specs/`.
 
+```bash
+mdkir docs
+```
+
 ### Paso 2 — Ejecutar la ingesta
 
 ```bash
