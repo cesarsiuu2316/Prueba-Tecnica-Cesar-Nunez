@@ -6,6 +6,10 @@ retrieval API has a populated ChromaDB collection to search.
 Usage:
     python app/main.py
 """
+import os
+# Suppress HuggingFace Hub warnings about symlinks and progress bars 
+os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
+os.environ["HF_HUB_VERBOSITY"] = "error"
 
 from data_ingest import chunk_documents, clean_documents, load_documents
 from embedding_docs import EmbeddingManager
