@@ -119,22 +119,16 @@ fastapi dev app/api.py
 ```
 
 Comprobaciones rápidas:
-```bash
-# Estado del servicio
-curl localhost:8000/health
-# {"status":"ok"}
 
-# Pregunta relevante -> sufficient_context: true + contexto
+**bash (Linux/macOS):**
+```bash
 curl -X POST localhost:8000/retrieve -H "Content-Type: application/json" \
   -d '{"question":"¿Cómo soluciono el error de conexión con la base de datos?"}'
+```
 
-# Pregunta irrelevante -> sufficient_context: false
-curl -X POST localhost:8000/retrieve -H "Content-Type: application/json" \
-  -d '{"question":"¿Cuál es la capital de Francia?"}'
-
-# Pregunta vacía -> 422 (validación)
-curl -X POST localhost:8000/retrieve -H "Content-Type: application/json" \
-  -d '{"question":"   "}'
+**cmd (Windows):**
+```cmd
+curl -X POST localhost:8000/retrieve -H "Content-Type: application/json" -d "{\"question\":\"¿Cómo soluciono el error de conexión con la base de datos?\"}"
 ```
 
 `POST /retrieve` devuelve:
@@ -200,21 +194,18 @@ El nodo usa el `grounding_prompt` devuelto por la API como prompt de entrada.
 
 #### 4.5 Probar
 
-Envía una pregunta al webhook del workflow (con curl o Postman):
+Envía una pregunta al webhook del workflow (con curl o Postman). Para pruebas, usa
+`/webhook-test/ask` (con el workflow abierto y "Listen for test event" activo).
+
+**bash (Linux/macOS):**
 ```bash
-# Producción
 curl -X POST http://localhost:5678/webhook/ask -H "Content-Type: application/json" \
   -d '{"question":"El sistema devuelve error de conexión, ¿qué significa?"}'
+```
 
-curl -X POST http://localhost:5678/webhook/ask -H "Content-Type: application/json" \
-  -d '{"question":"¿Como puedo contactar el área de soporte?}'
-
-curl -X POST http://localhost:5678/webhook/ask -H "Content-Type: application/json" \
-  -d '{"question":"¿Ya existe material con este código}'
-
-# Pruebas (con el workflow abierto y "Listen for test event" activo)
-curl -X POST http://localhost:5678/webhook-test/ask -H "Content-Type: application/json" \
-  -d '{"question":"El sistema devuelve error de conexión, ¿qué significa?"}'
+**cmd (Windows):**
+```cmd
+curl -X POST http://localhost:5678/webhook/ask -H "Content-Type: application/json" -d "{\"question\":\"El sistema devuelve error de conexión, ¿qué significa?\"}"
 ```
 
 ---
@@ -250,13 +241,3 @@ Variables en `.env` (valores por defecto entre paréntesis):
    contexto suficiente (`sufficient_context: false`), el prompt obliga al modelo a decir que la
    información no está en la documentación → **sin alucinaciones, siempre en español**.
 
----
-
-## Solución de problemas
-
-- **`ModuleNotFoundError` / no encuentra `docs` o `.env`:** ejecuta los comandos **desde la raíz del
-  repo** (los módulos usan rutas relativas).
-- **`/retrieve` devuelve `sufficient_context: false` siempre:** primero ejecuta `python app/main.py`
-  para poblar el índice; si aun así no recupera, baja `SIMILARITY_THRESHOLD`.
-- **n8n no alcanza la API (Docker):** usa `http://host.docker.internal:8000`, no `localhost`.
-- **La primera ejecución tarda:** está descargando el modelo de embeddings (una sola vez).
