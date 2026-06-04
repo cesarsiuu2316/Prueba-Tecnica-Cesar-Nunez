@@ -1,0 +1,8 @@
+# files and instructions to ignore
+docs/*
+specs
+
+
+# Planning stages files
+plan.md
+CLAUDE.md

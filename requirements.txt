@@ -1,0 +1,16 @@
+# API (bundles uvicorn + CLI via the standard extra)
+fastapi[standard]
+
+# Typed config for config.py (pydantic itself ships with FastAPI)
+pydantic-settings
+
+# Ingestion — LangChain core Documents + splitters; pypdf for PDF
+langchain-core
+langchain-text-splitters
+pypdf
+
+# Embeddings — HuggingFace, multilingual-e5-small
+sentence-transformers
+
+# Vector store
+chromadb
