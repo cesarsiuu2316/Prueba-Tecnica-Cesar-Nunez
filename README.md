@@ -1,13 +1,8 @@
-# Prueba Técnica — Asistente de Soporte RAG (UniLink)
+# Prueba Técnica - Asistente de Soporte RAG (UniLink)
 
-Un asistente de soporte que responde preguntas  usando únicamente la
-documentación técnica brindada. Las respuestas están en el corpus: si la documentación no contiene la respuesta, el asistente lo indica
-explícitamente en lugar de inventarla.
+Un asistente de soporte que responde preguntas  usando únicamente la documentación técnica brindada. Las respuestas están en el corpus: si la documentación no contiene la respuesta, el asistente lo indica explícitamente en lugar de inventarla.
 
-Alcance de este repositorio: la *pipeline de ingesta* + la *API REST de recuperación*. La
-generación con un LLM y la orquestación viven en n8n (proyecto aparte). La API no llama a ningún
-LLM: devuelve el contexto recuperado y un *prompt completo en español* que el nodo LLM de n8n usa
-para generar la respuesta final. El workflow de n8n se adjunta por separado en la raíz del repo como
+Alcance de este repositorio: la *pipeline de ingesta* + la *API REST de recuperación*. La generación con un LLM y la orquestación viven en n8n (proyecto aparte). La API no llama a ningún LLM: devuelve el contexto recuperado y un *prompt completo en español* que el nodo LLM de n8n usa para generar la respuesta final. El workflow de n8n se adjunta por separado en la raíz del repo como
 `Prueba-Tecnica-n8n-Workflow.json`.
 
 Flujo completo: **n8n (webhook) → API `/retrieve` → n8n (nodo LLM) → respuesta en español**.
@@ -98,7 +93,7 @@ vacía). Formatos soportados: **`.txt`, `.md`, `.pdf`, `.json`**. Puedes usar el
 descrito en `specs/`.
 
 ```bash
-mdkir docs
+mkdir docs
 ```
 
 ### Paso 2 — Ejecutar la ingesta
